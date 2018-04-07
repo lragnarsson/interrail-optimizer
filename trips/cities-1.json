@@ -1,0 +1,31 @@
+{
+  "starting_city": "linköping",
+  "trip_days": 7,
+  "avg_city_stay": 2,
+  "travellers": [
+    {
+      "name": "Lage",
+      "cities": [
+        "krakow, pl",
+        "berlin",
+        "milan"
+      ]
+    },
+    {
+      "name": "Albin",
+      "cities": [
+        "brygge",
+        "berlin",
+        "wien"
+      ]
+    },
+    {
+      "name": "Isak",
+      "cities": [
+        "munchen",
+        "berlin",
+        "paris"
+      ]
+    }
+  ]
+}

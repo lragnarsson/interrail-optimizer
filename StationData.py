@@ -7,8 +7,10 @@ from geopy.geocoders import Nominatim
 class StationData:
 
     def __init__(self, railway_data_path="data/european-train-stations.csv"):
-        self.all_station_data = pd.read_csv(railway_data_path, sep=";", usecols=self.interesting_columns)
         self.logger = logging.getLogger("StationData")
+        self.logger.debug("Loading station data from " + railway_data_path)
+        self.all_station_data = pd.read_csv(railway_data_path, sep=";", usecols=self.interesting_columns)
+
 
     @staticmethod
     def _station_row_to_dict(row):
@@ -99,10 +101,12 @@ class StationData:
                 self.logger.debug("Could not find unique station from translated name, matches:\n-----\n{0}".format("\n".join(matching_names)))
                 return None
 
-        self.logger.debug("Station {0} was found".format(station["name"]))
+            self.logger.debug("Station {0} was found".format(station["name"]))
+
         return station
 
-    def get_station_dict(self, city_name, country_code=""):
+    def get_station_dict(self, city_string):
+        (city_name, country_code) = self._get_city_name_and_country_code(city_string)
         city_name = city_name.title()
         country_code=country_code.upper()
 
@@ -127,6 +131,14 @@ class StationData:
         distance = StationData.distance_between_stations(station_a, station_b)
         time_s = distance / average_speed_ms
         return time_s / 3600
+
+    @staticmethod
+    def _get_city_name_and_country_code(city_string):
+        if "," in city_string:
+            return city_string.split(", ")
+        city_name = city_string
+        country_code = ""
+        return city_name, country_code
 
     # Constants:
     interesting_columns = [
