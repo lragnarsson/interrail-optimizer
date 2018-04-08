@@ -11,6 +11,7 @@ class InputHandler:
         self.starting_station = None
         self.trip_days = 0
         self.avg_city_stay = 0
+        self.all_travellers = []
 
     def read_input_file(self, file_path):
         with open(file_path) as trip_file:
@@ -27,6 +28,7 @@ class InputHandler:
     def _load_traveller_requests(self, traveller_requests):
         for traveller in traveller_requests:
             traveller_name = traveller["name"]
+            self.all_travellers.append(traveller_name)
             logging.debug("Loading cities for traveller: " + traveller_name)
             for city_string in traveller["cities"]:
                 city_station = self.station_data.get_station_dict(city_string)

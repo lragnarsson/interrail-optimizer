@@ -28,7 +28,7 @@ class CandidateGenerator:
         if len(self.all_combinations) <= n:
             return self.all_combinations
 
-        top_n = sorted(self.all_combinations, key=lambda trip: trip.votes)[-5:]
+        top_n = sorted(self.all_combinations, key=lambda trip: trip.votes)[-n:]
         return top_n
 
     def _get_trip_total_votes(self, trip_cities):

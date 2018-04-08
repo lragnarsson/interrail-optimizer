@@ -118,15 +118,29 @@ class StationData:
             self.logger.warning("No station was found in {0} {1}".format(city_name, country_code))
         return station
 
-    # Calculates the straight line distance between two stations
+    # Calculates the straight line distance between two stations plus some extra
     @staticmethod
     def distance_between_stations(station_a, station_b):
-        return gpxpy.geo.haversine_distance(station_a["lat"], station_a["lon"],
-                                            station_b["lat"], station_b["lon"])
+        lat_sourth_threshold = 46
+        lat_north_threshold = 55
+        lon_threshold = 4
+        straight_distance = gpxpy.geo.haversine_distance(station_a["lat"], station_a["lon"],
+                                                         station_b["lat"], station_b["lon"])
+        approx_distance = straight_distance * 1.15
+
+        if station_a["country"] != station_b["country"]:
+            approx_distance *= 1.2
+            lon_delta = abs(station_a["lon"] - station_b["lon"])
+            if (station_a["lat"] < lat_sourth_threshold and station_b["lat"] < lat_sourth_threshold) and lon_delta > lon_threshold:
+                approx_distance *= 1.6
+            elif (station_a["lat"] > lat_north_threshold) != (station_a["lat"] > lat_north_threshold) and lon_delta > lon_threshold:
+                approx_distance *= 1.8
+
+        return round(approx_distance)
 
     # Calculates an approximate time between two cities by train
     @staticmethod
-    def time_between_stations(station_a, station_b, average_speed_kms=100):
+    def time_between_stations(station_a, station_b, average_speed_kms=120):
         average_speed_ms = average_speed_kms / 3.6
         distance = StationData.distance_between_stations(station_a, station_b)
         time_s = distance / average_speed_ms

@@ -1,7 +1,9 @@
 import logging
 from InputHandler import InputHandler
 from CandidateGenerator import CandidateGenerator
+from CandidateRanker import get_top_n_trips
 import StationData
+
 
 def run(trip_path="trips/cities-1.json"):
     input_handler = InputHandler()
@@ -10,18 +12,18 @@ def run(trip_path="trips/cities-1.json"):
                                              input_handler.trip_days,
                                              input_handler.avg_city_stay)
 
-    sd = StationData.StationData()
+    trip_candidates = candidate_generator.get_n_most_popular_candidates(10)
 
-    trip_candidates = candidate_generator.get_n_most_popular_candidates(3)
+    for trip in trip_candidates:
+        trip.calculate_trip_distances(input_handler.requested_cities,
+                                      input_handler.starting_station,
+                                      StationData.StationData.time_between_stations)
+        trip.find_optimal_route()
+        trip.calculate_route_score(input_handler.requested_cities, input_handler.all_travellers)
 
-    print([t.calculate_trip_distance(input_handler.requested_cities, sd.distance_between_stations) for t in trip_candidates])
+    winning_trips = get_top_n_trips(trip_candidates, 5)
 
-
-    #if station_a is not None and station_b is not None:
-    #    duration = StationData.time_between_stations(station_a, station_b)
-    #    logging.debug("It takes approximately {0} hours to travel from {1} to {2}".format(duration,
-     #                                                                                     station_a["name"],
-     #                                                                                     station_b["name"]))
+    print("\n".join([str(t) for t in winning_trips]))
 
 
 if __name__ == "__main__":

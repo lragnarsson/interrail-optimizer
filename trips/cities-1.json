@@ -1,30 +1,38 @@
 {
   "starting_city": "linköping",
-  "trip_days": 7,
+  "trip_days": 14,
   "avg_city_stay": 2,
   "travellers": [
     {
       "name": "Lage",
       "cities": [
-        "krakow, pl",
         "berlin",
-        "milan"
+        "prague, cz",
+        "paris",
+        "amsterdam",
+        "milan, it",
+        "brygge"
       ]
     },
     {
       "name": "Albin",
       "cities": [
-        "brygge",
         "berlin",
-        "wien"
+        "wien",
+        "rome, it",
+        "prague, cz",
+        "wien, at",
+        "brygge"
       ]
     },
     {
       "name": "Isak",
       "cities": [
+        "paris",
+        "madrid",
+        "amsterdam",
         "munchen",
-        "berlin",
-        "paris"
+        "copenhagen"
       ]
     }
   ]
